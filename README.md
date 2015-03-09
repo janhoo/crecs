@@ -8,7 +8,9 @@ This R package is for multivariate regression and classification with spatial ob
 [gam](http://cran.r-project.org/web/packages/mgcv/index.html), and
 [maxent](http://www.cs.princeton.edu/~schapire/maxent/). It provides means for crossvalidation, various model performance metrics and helper functions for null models, spatial autocorrelation, etc., and a number of convenience functions.
 
-**still under heavy developement**
+fghfgh
+
+
 ----
 
 ### Installation
