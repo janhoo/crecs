@@ -120,7 +120,7 @@ pseudo.absence<-function(presence,raster,area=NULL,sample.size=1000,extent="rast
 {
 	# uses ordinal()
 	library(raster)
-	# distance unit of buffer: see raster::buffer()
+	# distance unit of buffer: see ?raster::buffer()
 	# presence, raster, and area must have same crs!
 	# out="spdf" -> SpatialPointsDataFrame incl. presence (field "presence" with 1:presence 0:absence)
 	# out="sp" -> SpatialPoints of pseudo.absence data
@@ -244,6 +244,7 @@ pseudo.absence<-function(presence,raster,area=NULL,sample.size=1000,extent="rast
 #' 
 get.environ<-function(points, environ,dropcols=TRUE)
 {
+	library(raster)
 	stopifnot( class(environ) %in% c("RasterLayer","RasterStack","RasterBrick") )
 	stopifnot(class(points) %in% c("SpatialPoints","SpatialPointsDataFrame"))
 	if(class(dropcols)=="logical") 
@@ -269,6 +270,7 @@ get.environ<-function(points, environ,dropcols=TRUE)
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 elim.outliers<-function(data,species=NULL,na.rm=FALSE,threshold=NULL,verbose=TRUE)
 { # try threshold=1e-7
+	library(sp)
 	stopifnot( class(data) %in% c("data.frame","SpatialPointsDataFrame", "SpatialGridDataFrame") ) #sgdf makes not much sense anyway‚
 	stopifnot( class(species) %in% c("NULL","character") )
 	stopifnot( class(threshold) %in% c("NULL","numeric") )

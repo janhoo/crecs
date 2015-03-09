@@ -112,7 +112,6 @@ makefn.species.response<-function(response, species.cols,name.species,verbose)
 {
 	species.response <- function(species, WS, DS)
 	{
-		
 		#uses isolate.species()
 		# WS/DS (sp)df with mass/counts
 		library(sp)
@@ -170,7 +169,7 @@ makefn.pseudo.absence<-function(raster,area,extent,buffer,verbose,chunks=NULL,xt
 		# uses ordinal()
 		library(sp)
 		library(raster)
-		library(gdata)
+		library(gdata) # ordinal()
 		# distance unit of buffer: see raster::buffer()
 		# presence, raster, and area must have same crs!
 		# out="spdf" -> SpatialPointsDataFrame incl. presence (field "presence" with 1:presence 0:absence)
