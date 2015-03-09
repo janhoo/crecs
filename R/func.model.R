@@ -162,7 +162,7 @@ crossvalid <- function(Ncv,
                        response, 
                        predictors, 
                        secondary=NULL, 
-                       strata, 
+                       strata=NULL, 
                        enviStack,
                        enviPix,
                        seed,
@@ -196,7 +196,7 @@ crossvalid <- function(Ncv,
 	#  rast             [<logical>] output raster
 	#  flat             [<logical>] no list, just metric as data.frame
 #  ...              arguments for makefn.free.model
-	
+	library(dismo)
 	sec<-NULL
 	if(flat){
 		rast<-FALSE

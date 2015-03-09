@@ -1,6 +1,6 @@
 Package: crecs
 Type: Package
-Version: 0.0.1
+Version: 0.0.2
 Title: quantitative species distribution modelling
 Description: modelling framework for quantitative species distribution modelling with helper functions for cross validation, null models and whatnot
 Author: Jan M Holstein
