@@ -4,10 +4,10 @@
 \title{Cross validation routine for species distribution models}
 \usage{
 crossvalid(Ncv, Kfold, data, method, responsetype, response, predictors,
-  secondary = NULL, strata, enviStack, enviPix, seed, check.names = TRUE,
-  aggregated = NULL, pseudoabsence = NULL, gbm.trees = 2000,
-  maxargs = c("outputformat=logistic", "defaultprevalence=0.5"),
-  rast = TRUE, flat = FALSE, ...)
+  secondary = NULL, strata = NULL, enviStack, enviPix, seed,
+  check.names = TRUE, aggregated = NULL, pseudoabsence = NULL,
+  gbm.trees = 2000, maxargs = c("outputformat=logistic",
+  "defaultprevalence=0.5"), rast = TRUE, flat = FALSE, ...)
 }
 \arguments{
 \item{Ncv}{Number of cv repititions.}
@@ -26,7 +26,7 @@ crossvalid(Ncv, Kfold, data, method, responsetype, response, predictors,
 
 \item{secondary}{Column name in data. Use this to calculate model performance metrics from instead of response. Default is NULL.}
 
-\item{strata}{criterion for gereation of folds}
+\item{strata}{criterion for fold generation. #FIXME}
 
 \item{enviStack}{\code{RasterStack} of predictors. Used to calculate SD map}
 
