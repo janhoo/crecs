@@ -17,4 +17,7 @@ his data set gives 300 random sampling locations within the Deutsche Bucht with
 \author{
 Jan M Holstein , 2015-03-05
 }
+\seealso{
+\code{\link{deutschebucht}}
+}
 

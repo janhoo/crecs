@@ -2,6 +2,7 @@
 #' @title Virtual sampling of three virtual species from the Deutsche Bucht
 #' @description his data set gives 300 random sampling locations within the Deutsche Bucht with 
 #' 3 virtual species including sampling error.
+#' @seealso \code{\link{deutschebucht}}
 #' @docType data
 #' @usage data(species)
 #' @format a \code{SpatialPointsDataFrame} containing 3x300 observations.
