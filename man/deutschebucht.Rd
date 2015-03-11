@@ -21,6 +21,6 @@ in the south-east sector of the North Sea, the Deutsche Bucht.
 Jan M Holstein , 2015-03-05
 }
 \seealso{
-\code{\link{metrics}}
+\code{\link{species}}
 }
 

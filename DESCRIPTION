@@ -2,23 +2,23 @@ Package: crecs
 Type: Package
 Version: 0.0.2
 Title: quantitative species distribution modelling
-Description: modelling framework for quantitative species distribution modelling with helper functions for cross validation, null models and whatnot
+Description: modelling framework for quantitative species distribution
+    modelling with helper functions for cross validation, null models and
+    whatnot
 Author: Jan M Holstein
 Maintainer: Jan M Holstein<janmholstein@gmail.com>
-Authors@R: c(
-    person("Jan", "Holstein","M" , "janmholstein@gmail.com", c("aut", "cre", "cph"))
-    )
+Authors@R: c( person("Jan", "Holstein","M" , "janmholstein@gmail.com", c("aut","cre", "cph")) )
 Depends:
-	sp,
-	rgdal,
-	gdata,
-	minerva,
-	spdep,
-	raster
+    sp,
+    rgdal,
+    gdata,
+    minerva,
+    spdep,
+    raster
 Suggests:
-	randomForest,
-	dismo,
-	mgcv,
-	gbm,
-	rJava
+    randomForest,
+    dismo,
+    mgcv,
+    gbm,
+    rJava
 License: GNU Affero GPL (>= v3.0)
