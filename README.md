@@ -1,15 +1,10 @@
 # crecs
 ## Comfy Multivariate Regression and Cross-validation for Spatial Objects
 
-This R package is for multivariate regression and classification with spatial objects. It was developed for species-distribution modelling, but there's nothing biology-specific to it. Use it on spatially distributed continious quantities (as well as count and presence/absence data), featuring 
+This R package contains functions that allows to "species-distribution-model" continious quantities (as well as count and presence/absence data) for some SDM methods, such as 
 [random forest](http://cran.r-project.org/web/packages/randomForest/index.html),
-[gbm.step](http://cran.r-project.org/web/packages/dismo/index.html), and
-[gbm](http://cran.r-project.org/web/packages/gbm/index.html), 
-[gam](http://cran.r-project.org/web/packages/mgcv/index.html), and
-[maxent](http://www.cs.princeton.edu/~schapire/maxent/). It provides means for crossvalidation, various model performance metrics and helper functions for null models, spatial autocorrelation, etc., and a number of convenience functions.
-
-**_still under heavy developement_**
-
+[gbm](http://cran.r-project.org/web/packages/dismo/index.html), and
+[gam](http://cran.r-project.org/web/packages/mgcv/index.html). It provides means for crossvalidation, various model performance metrics and helper functions for null models, spatial autocorrelation, ... .
 
 ----
 

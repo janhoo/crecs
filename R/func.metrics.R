@@ -11,39 +11,26 @@ metrics <- function(response,prediction,secondary=NULL,threshold.def="spec_sens"
     
     p <- as.numeric(prediction[presence.absence(response,logical=T)])
     a <- as.numeric(prediction[presence.absence(response,logical=T,inverse=T)])
+    e<- evaluate(p=p,a=a)
     
-	# write results
+    true.presence<-presence.absence(response,logical=T)
+    threshold= as.numeric(threshold(e)[threshold.def])
+    predicted.presence<-presence.absence(x=prediction,t=threshold,logical=TRUE)
+    #predicted.presence<-prediction>threshold(e)[[threshold.def]]
+    paretoopt<-which.max(e@TPR + e@TNR)
+    # write results
 	#browser()
-	###############	
-	result<-NULL
-	if(length(a)>0){
-		e<- evaluate(p=p,a=a)
-
-		threshold= as.numeric(threshold(e)[threshold.def])
-		#predicted.presence<-prediction>threshold(e)[[threshold.def]]
-		paretoopt<-which.max(e@TPR + e@TNR)
-		result<-c(result, auc      = slot(e,'auc'))
-		result<-c(result, kappa    = e@kappa[paretoopt])
-		result<-c(result, overdp   = e@ODP[paretoopt])
-		result<-c(result, sensi    = e@TPR[paretoopt])
-		result<-c(result, spezi    = e@TNR[paretoopt])
-		result<-c(result, tss      = e@TPR[paretoopt]+e@TNR[paretoopt]-1)
-		result<-c(result, misclass = e@MCR[paretoopt])
-    } else {
-    	threshold=0
-    	result<-c(result, auc      = NA)
-    	result<-c(result, kappa    = NA)
-    	result<-c(result, overdp   = NA)
-    	result<-c(result, sensi    = NA)
-    	result<-c(result, spezi    = NA)
-    	result<-c(result, tss      = NA)
-    	result<-c(result, misclass = NA)
-    }
-	true.presence<-presence.absence(response,logical=T)
-	predicted.presence<-presence.absence(x=prediction,t=threshold,logical=TRUE)
-    var.residuals <- (response-prediction)^2
-    var.response  <- (response-mean(response))^2
-	
+    ###############
+    result<-NULL
+    result<-c(result, auc      = slot(e,'auc'))
+    result<-c(result, kappa    = e@kappa[paretoopt])
+    result<-c(result, overdp   = e@ODP[paretoopt])
+    result<-c(result, sensi    = e@TPR[paretoopt])
+    result<-c(result, spezi    = e@TNR[paretoopt])
+    result<-c(result, tss      = e@TPR[paretoopt]+e@TNR[paretoopt]-1)
+    result<-c(result, misclass = e@MCR[paretoopt])
+       var.residuals <- (response-prediction)^2
+       var.response  <- (response-mean(response))^2
     result<-c(result, mse      = mean( var.residuals ))
     result<-c(result, rmse      = sqrt(mean( var.residuals )))
     result<-c(result, rmse.trivi      = sqrt(mean( var.response )))
