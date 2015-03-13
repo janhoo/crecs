@@ -140,7 +140,7 @@ model <- function(data,
 #' @param response Column name of response in data argument
 #' @param predictors Column names of predictors to use in data argument
 #' @param secondary Column name in data. Use this to calculate model performance metrics from instead of response. Default is NULL.
-#' @param strata criterion for gereation of folds
+#' @param strata criterion for fold generation. #FIXME
 #' @param enviStack \code{RasterStack} of predictors. Used to calculate SD map
 #' @param enviPix \code{SpatialPixelsDataFrame} of predictors. enviPix<-as(enviStack,"SpatialPixelsDataFrame"). Only for performance.
 #' @param seed Integer. You probably want reproduceability. Note that Maxent's pseudoabsence generation can't be seeded this way--so expect those results to vary
@@ -162,7 +162,7 @@ crossvalid <- function(Ncv,
                        response, 
                        predictors, 
                        secondary=NULL, 
-                       strata, 
+                       strata=NULL, 
                        enviStack,
                        enviPix,
                        seed,
@@ -196,7 +196,7 @@ crossvalid <- function(Ncv,
 	#  rast             [<logical>] output raster
 	#  flat             [<logical>] no list, just metric as data.frame
 #  ...              arguments for makefn.free.model
-	
+	library(dismo)
 	sec<-NULL
 	if(flat){
 		rast<-FALSE
