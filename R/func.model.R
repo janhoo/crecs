@@ -1,4 +1,4 @@
-#' @title Make a species distribution model
+#' @title Make a (species distribution) regression or classification model
 #' 
 #' @description Returns the model, the performance metrics, and/or distribution maps depending on arguments.
 #' 
@@ -8,8 +8,8 @@
 #' @param response Column name of response in data argument
 #' @param predictors Column names of predictors to use in data argument
 #' @param secondary Column name in data. Use this to calculate model performance metrics from instead of response. Default is NULL.
-#' @param enviStack \code{RasterStack} of predictors. Used to calculate SD map
-#' @param enviPix \code{SpatialPixelsDataFrame} of predictors. enviPix<-as(enviStack,"SpatialPixelsDataFrame"). Only for performance.
+#' @param enviStack \code{RasterStack} of predictors. Used to calculate SD map. See details.
+#' @param enviPix \code{SpatialPixelsDataFrame} of predictors. enviPix<-as(enviStack,"SpatialPixelsDataFrame"). Only for performance. See details.
 #' @param seed Integer. For reproduceability.
 #' @param aggregated logical or \code{NULL} Default is  \code{NULL}. This is for ensemble calculations and added to metrics in case of not being \code{NULL}
 #' @param pseudoabsence logical or \code{NULL} Default is \code{NULL}. Same as above
@@ -24,8 +24,23 @@
 #' @param ... ellipsis is used to pass arguments to subsequent functions like  \code{threshold.def} and \code{moRange}. See \code{\link{metrics}} \code{\link{moranii}} for details
 #' @return A \code{model}, or a \code{data.frame} or a \code{list} depending on arguments
 #' @details SDM methos used are "gam", "rf", "gbm", "max", or "gbm.step".
-#' If you want spatial autocorrelation metrics you probably need to pass additional arguments to \code{\link{moranii}}. Note that calculations may take very long depending on number of points and parametrization #FIXME
-#' @examples #FIXME
+#' If you want spatial autocorrelation metrics you probably need to pass additional arguments to \code{\link{moranii}}. 
+#' Note that calculations may take very long depending on number of points and parametrization.
+#'
+#' \code{enviStack} and \code{enviPix} are the same in different data types. 
+#' It is sufficient if you supply only one--the other will be generated. 
+#' For big data sets and repetitive tasks it may be worthwhile to pass both to increase performance
+#' @examples 
+#' data(deutschebucht)
+#' data(species)
+#' data<-get.environ(species,deutschebucht)
+#' mo<-model(data=data,method="rf",responsetype = "continuous", response = "species1", predictors = c("mgs","mud","depth"),enviStack = deutschebucht, model=TRUE)
+#' qqplot(data$species1,mo$predicted)
+#' 
+#' mo<-model(data=data,method="rf",responsetype = "continuous", response = "species1", predictors = c("mgs","mud","depth"),enviStack = deutschebucht, rast=TRUE)
+#' par(mfrow=c(1,2))
+#' plot(mo$raster$full,main="prediction")
+#' plot(raster(deutschebucht,layer=match("species1",names(deutschebucht))),main="true distribution")
 #' 
 model <- function(data, 
                   method,             
@@ -33,8 +48,8 @@ model <- function(data,
                   response, 
                   predictors, 
                   secondary=NULL, 
-                  enviStack, 
-                  enviPix, 
+                  enviStack=NULL, 
+                  enviPix=NULL, 
                   seed=NULL, 
 				  aggregated=NULL, 
                   pseudoabsence=NULL, 
@@ -73,7 +88,13 @@ model <- function(data,
 	#  ...              arguments for moranii() & makefn.free.model (moParams=c("response","residuals"),moRange=list(c(0,0.5),c(0.5,1)),check.names=TRUE)
 	
 	#dots <- list(...)
-	
+	stopifnot( !all(    c(is.null(enviStack), is.null(enviPix)) ))
+	if(is.null(enviStack)){
+		enviStack <- stack(enviPix)
+	}
+	if(is.null(enviPix)){
+		enviPix <- as(enviStack,"SpatialPixelsDataFrame")
+	}	
 	if(is.null(seed)){
 		seed <- as.integer(runif(1)*100000)
 	}
@@ -128,7 +149,7 @@ model <- function(data,
 #                                     
 # crossvalid :: cross validation routine 
 #
-#' @title Cross validation routine for species distribution models
+#' @title Cross validation routine for (species distribution) regression or classification models
 #' 
 #' @description repeated k-fold cross-validation. Calculate model preformance metrics, disribution, standard deviation and occurence maps.
 #' 
@@ -150,10 +171,22 @@ model <- function(data,
 #' @param maxargs argument to pass tp maxent
 #' @param flat return model performance metrics only (as \code{data.frame})
 #' @param rast return \code{list} of metric and raster
-#' @param ... ellipsis is used to pass arguments to subsequent functions like  \code{threshold.def}. See \code{\link{metrics}} for details
-
-
-#
+#' @param ... ellipsis is used to pass arguments to subsequent functions like  \code{threshold.def} (see \code{\link{metrics}}) or \code{moranii()} & \code{makefn.free.model()} (moParams=c("response","residuals"),moRange=list(c(0,0.5),c(0.5,1)),check.names=TRUE)
+#' 
+#' @examples 
+#' data(deutschebucht)
+#' data(species)
+#' data<-get.environ(species,deutschebucht)
+#' cv<-crossvalid(Ncv=1,Kfold=5,data=data,method="rf",responsetype = "continuous", response = "species1", predictors = c("mgs","mud","depth"),enviStack = deutschebucht,seed=23, check.names = FALSE)
+#'  # aggregated results
+#' cv$metric.agg
+#' 
+#' par(mfrow=c(2,2))
+#' plot(cv$rmean,main="cv prediction")
+#' plot(cv$sd,main="standart deviation")
+#' plot(raster(deutschebucht,layer=match("species1",names(deutschebucht))),main="true distribution")
+#' plot(cv$rbin,main="prob of occurrence")
+#' 
 crossvalid <- function(Ncv, 
                        Kfold, 
                        data, 
@@ -163,10 +196,9 @@ crossvalid <- function(Ncv,
                        predictors, 
                        secondary=NULL, 
                        strata=NULL, 
-                       enviStack,
-                       enviPix,
+                       enviStack=NULL,
+                       enviPix=NULL,
                        seed,
-					   check.names=TRUE,
 					   aggregated=NULL, 
 					   pseudoabsence=NULL,
                        gbm.trees=2000,
@@ -197,6 +229,13 @@ crossvalid <- function(Ncv,
 	#  flat             [<logical>] no list, just metric as data.frame
 #  ...              arguments for makefn.free.model
 	library(dismo)
+	stopifnot( !all(    c(is.null(enviStack), is.null(enviPix)) ))
+	if(is.null(enviStack)){
+		enviStack <- stack(enviPix)
+	}
+	if(is.null(enviPix)){
+		enviPix <- as(enviStack,"SpatialPixelsDataFrame")
+	}	
 	sec<-NULL
 	if(flat){
 		rast<-FALSE
