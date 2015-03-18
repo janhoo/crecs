@@ -178,14 +178,16 @@ model <- function(data,
 #' data(species)
 #' data<-get.environ(species,deutschebucht)
 #' cv<-crossvalid(Ncv=1,Kfold=5,data=data,method="rf",responsetype = "continuous", response = "species1", predictors = c("mgs","mud","depth"),enviStack = deutschebucht,seed=23, check.names = FALSE)
-#'  # aggregated results
+#'  
+#' # aggregated results
 #' cv$metric.agg
 #' 
+#' # plot result maps
 #' par(mfrow=c(2,2))
 #' plot(cv$rmean,main="cv prediction")
 #' plot(cv$sd,main="standart deviation")
 #' plot(raster(deutschebucht,layer=match("species1",names(deutschebucht))),main="true distribution")
-#' plot(cv$rbin,main="prob of occurrence")
+#' plot(cv$rbin,main="prob. of occurrence")
 #' 
 crossvalid <- function(Ncv, 
                        Kfold, 

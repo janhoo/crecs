@@ -7,14 +7,15 @@ Description: modelling framework for quantitative species distribution
     whatnot
 Author: Jan M Holstein
 Maintainer: Jan M Holstein<janmholstein@gmail.com>
-Authors@R: c( person("Jan", "Holstein","M" , "janmholstein@gmail.com", c("aut","cre", "cph")) )
-Depends:
-    sp,
-    rgdal,
-    gdata,
-    minerva,
-    spdep,
-    raster
+Authors@R: c( person("Jan", "Holstein","M" , "janmholstein@gmail.com",
+    c("aut","cre", "cph")) )
+Depends: 
+	sp,
+	rgdal,
+	gdata,
+	minerva,
+	spdep,
+	raster
 Suggests:
     randomForest,
     dismo,
