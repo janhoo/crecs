@@ -1,3 +1,9 @@
+wtf<-function(r)
+{
+	stopifnot(inherits(r, "RasterLayer"))
+	return(as.matrix(r))
+}
+
 
 #' @title bathytopografic position index
 #' 
