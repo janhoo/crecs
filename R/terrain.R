@@ -19,7 +19,7 @@ wtf<-function(r)
 #' @param scale apply preemptive \code{\link{scale}}
 #' @param inv switch sign (in case of bathemetry with positive depth values)
 #' @param verbose be verbose and plot 
-#' @details #FIXME
+#' @details 
 #' #FIXME
 #' @examples #FIXME
 #' 
@@ -112,7 +112,7 @@ bpi<-function(dem,orad,irad=NULL,slope=NULL,fac=1,simple=TRUE,simpler=TRUE,scale
 #' @param factors make factors (also include landform names)
 #' @param verbose be verbose and plot 
 #' @param trim trim the output raster to non-NA extent 
-#' @details #FIXME
+#' @details 
 #' #FIXME
 #' @examples #FIXME
 #' 

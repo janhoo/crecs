@@ -32,7 +32,6 @@ Returns different tpi's.
 }
 \details{
 #FIXME
-#FIXME
 }
 \examples{
 #FIXME

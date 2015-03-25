@@ -10,6 +10,7 @@ This R package is for multivariate regression and classification with spatial ob
 
 ----
 
+
 ### Installation
 just issue
 ```

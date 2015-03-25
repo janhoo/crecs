@@ -26,7 +26,6 @@ Returns landform analyses
 }
 \details{
 #FIXME
-#FIXME
 }
 \examples{
 #FIXME
