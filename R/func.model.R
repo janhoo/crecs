@@ -31,8 +31,6 @@
 #' It is sufficient if you supply only one--the other will be generated. 
 #' For big data sets and repetitive tasks it may be worthwhile to pass both to increase performance
 #' @examples 
-#' data(deutschebucht)
-#' data(species)
 #' data<-get.environ(species,deutschebucht)
 #' mo<-model(data=data,method="rf",responsetype = "continuous", response = "species1", predictors = c("mgs","mud","depth"),enviStack = deutschebucht, model=TRUE)
 #' qqplot(data$species1,mo$predicted)
@@ -174,8 +172,6 @@ model <- function(data,
 #' @param ... ellipsis is used to pass arguments to subsequent functions like  \code{threshold.def} (see \code{\link{metrics}}) or \code{moranii()} & \code{makefn.free.model()} (moParams=c("response","residuals"),moRange=list(c(0,0.5),c(0.5,1)),check.names=TRUE)
 #' 
 #' @examples 
-#' data(deutschebucht)
-#' data(species)
 #' data<-get.environ(species,deutschebucht)
 #' cv<-crossvalid(Ncv=1,Kfold=5,data=data,method="rf",responsetype = "continuous", response = "species1", predictors = c("mgs","mud","depth"),enviStack = deutschebucht,seed=23, check.names = FALSE)
 #'  
