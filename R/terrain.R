@@ -23,7 +23,7 @@ wtf<-function(r)
 #' #FIXME
 #' @examples #FIXME
 #' 
-bpi<-function(dem,orad,irad=NULL,slope=NULL,fac=1,simple=TRUE,simpler=TRUE,scale=FALSE,inv=FALSE,verbose=FALSE)
+bpi<-function(dem,orad,irad=NULL,slope=NULL,fac=1,simple=TRUE,simpler=TRUE,scale=FALSE,inv=FALSE,verbose=FALSE, raw=FALSE, ...)
 {
 	stopifnot(class(slope)%in%c("NULL","numeric"))
 	stopifnot(class(irad)%in%c("NULL","numeric"))
@@ -40,11 +40,17 @@ bpi<-function(dem,orad,irad=NULL,slope=NULL,fac=1,simple=TRUE,simpler=TRUE,scale
 	}
 	
 	mo<-focalWeight(dem,d=orad,type="circle")
+	if(verbose){
+		cat(ncol(mo),"x",nrow(mo),"Pixels for outer focal window (",orad,"map units )")
+	}
 	if(is.null(irad)){
 		M<-mo
 	} else {
 		# calc annulus matrix M
 		mi<-focalWeight(dem,d=irad,type="circle")
+		if(verbose){
+			cat("; ",ncol(mi),"x",nrow(mi),"Pixels for inner annulus window\n")
+		}
 		xoffset<-(ncol(mo)-ncol(mi))/2
 		yoffset<-(nrow(mo)-nrow(mi))/2
 		ro<-raster(mo) 
@@ -55,31 +61,27 @@ bpi<-function(dem,orad,irad=NULL,slope=NULL,fac=1,simple=TRUE,simpler=TRUE,scale
 		m1<-as.matrix(extend(x=ri,y=extent(ro),value=0))
 		m2<-m1/max(m1)
 		mo2<-mo/max(mo)
-		M1<-mo2-m2
-		M<-M1/sum(M1)
+		M<-(mo2-m2)
+		#M2<-M/sum(M) # normalize
+		M<-M*nrow(M)*ncol(M)/sum(M) # instead sum of M is matrix size 
 	}
 	# focal mean
 	if(scale){
 		dem<-scale(dem)
 	}
-	ra.tpi<-dem-focal(x=dem,w=M,na.rm=T,pad=F)
+	ra.tpi<-dem-focal(x=dem,w=M,fun=mean,na.rm=TRUE, ...)
+	if(raw){
+		if(verbose){
+			plot(ra.tpi,col=bpi.colors(100))
+		}
+		return(ra.tpi)
+	}
 	# normalize
 	if(scale){
 		sdf<-1
 	} else {
 		sdf<-cellStats(ra.tpi, stat="sd",na.rm=TRUE, asSample=F)
 	}
-	
-	if(simple){
-		m<-matrix(ncol=3,byrow = TRUE, data=c(-Inf,(-sdf)*fac,1, (-sdf)*fac,sdf*fac,2,sdf*fac,Inf,4)) #(0) Valley; (1) slope/flat; (4) ridge
-		BPI3<-reclassify(x=ra.tpi,rcl=m,right=TRUE)
-		if(verbose){
-			plot(BPI3,col=bpi.colors(3))
-		}
-		return(BPI3)
-	} 
-	m<-matrix(ncol=3,byrow = TRUE, data=c(-Inf,(-sdf),1, (-sdf),(0.5*(-sdf)),2,(0.5*(-sdf)),(0.5*sdf),3,(0.5*sdf),sdf,5,sdf,Inf,6)) # (1) valley; (2) lower slope; (3) flat [4-middle slope] ;(5) upper slope; (6) ridge
-	ra.tpi.cl<-reclassify(x=ra.tpi,rcl=m,right=TRUE)               # (1) valley; (2) lower slope; (3) flat [4-middle slope] ;(5) upper slope; (6) ridge
 	ra.slope<-terrain(dem,opt= "slope",neighbors = 8,unit = 'degrees')
 	if(is.null(slope)){
 		slope.threshold<-cellStats(ra.slope, stat="sd",na.rm=TRUE, asSample=F)
@@ -87,6 +89,20 @@ bpi<-function(dem,orad,irad=NULL,slope=NULL,fac=1,simple=TRUE,simpler=TRUE,scale
 		slope.threshold<-slope
 	}
 	ra.slope.cl<-reclassify(ra.slope,c(0,slope.threshold,0,slope.threshold,Inf,0.5))
+	if(simple){
+		m<-matrix(ncol=3,byrow = TRUE, data=c(-Inf,(-sdf)*fac,1, (-sdf)*fac,sdf*fac,2,sdf*fac,Inf,4)) #(1) Valley; (2) slope/flat; (4) ridge
+		B<-reclassify(x=ra.tpi,rcl=m,right=TRUE)
+		BPI<-B+ra.slope.cl
+		BPI3<-reclassify(BPI,c(2.1,2.9,3)) # middle slope
+		
+		if(verbose){
+			plot(BPI3,col=bpi.colors(4))
+			legend(x="topleft",title="Landforms", inset=.05, bty = "n", horiz=F,cex=0.7,fill=(bpi.colors(4)),c("Valley","Flat","Slope","Ridge"))
+		}
+		return(BPI3)
+	} 
+	m<-matrix(ncol=3,byrow = TRUE, data=c(-Inf,(-sdf),1, (-sdf),(0.5*(-sdf)),2,(0.5*(-sdf)),(0.5*sdf),3,(0.5*sdf),sdf,5,sdf,Inf,6)) # (1) valley; (2) lower slope; (3) flat [4-middle slope] ;(5) upper slope; (6) ridge
+	ra.tpi.cl<-reclassify(x=ra.tpi,rcl=m,right=TRUE)               # (1) valley; (2) lower slope; (3) flat [4-middle slope] ;(5) upper slope; (6) ridge
 	B<-ra.tpi.cl+ra.slope.cl
 	BPI<-reclassify(B,c(3.1,3.9,4)) # middle slope
 	if(simpler){
@@ -97,6 +113,7 @@ bpi<-function(dem,orad,irad=NULL,slope=NULL,fac=1,simple=TRUE,simpler=TRUE,scale
 	}
 	return(BPI)
 }
+
 
 
 
@@ -161,6 +178,9 @@ lfi<-function(dem,large.bpi,small.bpi,slope.threshold=NULL,factors=TRUE,verbose=
 	}
 	return(r)
 }
+
+
+
 
 
 
