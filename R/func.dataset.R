@@ -116,6 +116,26 @@ species.response <- function(species,response,ws=ws,ds=ds,species.cols,name.spec
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # sample background data
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#' @title sample background aka pseudo-absence data
+#' 
+#' @description takes \code{SpatialPoints} or \code{SpatialPointsDataFrame} and add  values from  
+#' FIXME 
+#' @param presence \code{SpatialPoints} of presence data 
+#' @param raster \code{RasterLayer} is required for sampling. If \code{buffer=NULL}, the background is sampled without the pixels with presence data. 
+#' @param area \code{SpatialPolygons} or  \code{SpatialPolygonsDataFrame} with an area within \code{raster} to be sampled (cmp. \code{extent})
+#' @param sample.size The sample size
+#' @param extent Eiter \code{raster(default), extent, or area}. Sample the whole area (extent), only where raster vals are !=NA (rater) or confined to an area (area).
+#' @param buffer Perimeter around presence data where background is not sampled. Distance unit of buffer: see \code{\link{raster::buffer}}.
+#' @param verbose Be verbose
+#' @param seed Seed for random background sampling 
+#' @param xtracols transfer given features from \code{presence}--input data \code{SpatialPointsDataFrame} to returned \code{SpatialPointsDataFrame}.
+#' @param out If \code{spdf}(default), a SpatialPointDataFrame is returned with a column "presence" with 1:presence 0:absence. If \code{sp}, only the \code{SpatialPoints} of the background are returned.  Overrides \code{xtracols}
+#' @param colname New colnames for \code{xtracols}. \code{length(colname)==length(xtracols)}.
+#' @return \code{SpatialPointsDataFrame} or \code{SpatialPoints}. See \code{out}.
+#' @details If \code{FALSE}, preexisting columns in \code{points} will be overwritten by column creates by looking up values in raster layers with the same name.
+#' #FIXME
+#' @examples #FIXME
+#' 
 pseudo.absence<-function(presence,raster,area=NULL,sample.size=1000,extent="raster",buffer=NULL,chunks=NULL,verbose=TRUE,seed=NULL, xtracols=NULL,out="spdf",colname=NULL)
 {
 	# uses ordinal()

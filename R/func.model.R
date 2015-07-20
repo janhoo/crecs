@@ -40,6 +40,7 @@
 #' plot(mo$raster$full,main="prediction")
 #' plot(raster(deutschebucht,layer=match("species1",names(deutschebucht))),main="true distribution")
 #' 
+# TODO check for NA's in responses!
 model <- function(data, 
                   method,             
                   responsetype,      
