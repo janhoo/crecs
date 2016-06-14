@@ -132,8 +132,7 @@ species.response <- function(species,response,ws=ws,ds=ds,species.cols,name.spec
 #' @param out If \code{spdf}(default), a SpatialPointDataFrame is returned with a column "presence" with 1:presence 0:absence. If \code{sp}, only the \code{SpatialPoints} of the background are returned.  Overrides \code{xtracols}
 #' @param colname New colnames for \code{xtracols}. \code{length(colname)==length(xtracols)}.
 #' @return \code{SpatialPointsDataFrame} or \code{SpatialPoints}. See \code{out}.
-#' @details If \code{FALSE}, preexisting columns in \code{points} will be overwritten by column creates by looking up values in raster layers with the same name.
-#' #FIXME
+#' @details  #FIXME
 #' @examples #FIXME
 #' 
 pseudo.absence<-function(presence,raster,area=NULL,sample.size=1000,extent="raster",buffer=NULL,chunks=NULL,verbose=TRUE,seed=NULL, xtracols=NULL,out="spdf",colname=NULL)

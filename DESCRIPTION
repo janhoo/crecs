@@ -9,13 +9,13 @@ Author: Jan M Holstein
 Maintainer: Jan M Holstein<janmholstein@gmail.com>
 Authors@R: c( person("Jan", "Holstein","M" , "janmholstein@gmail.com",
     c("aut","cre", "cph")) )
-Depends: 
-	sp,
-	rgdal,
-	gdata,
-	minerva,
-	spdep,
-	raster
+Depends:
+    sp,
+    rgdal,
+    gdata,
+    minerva,
+    spdep,
+    raster
 Suggests:
     randomForest,
     dismo,
@@ -24,3 +24,4 @@ Suggests:
     rJava
 License: GNU Affero GPL (>= v3.0)
 LazyData: Yes
+RoxygenNote: 5.0.1
