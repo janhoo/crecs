@@ -18,7 +18,7 @@ devtools::install_github("janhoo/crecs")
 ```
 you may need to (`install.packages("devtools")`) first.
 
-You are good to go.
+Done.
 
 
 
